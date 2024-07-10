@@ -71,10 +71,12 @@ dependencies {
     implementation(libs.androidx.material3)
 
     implementation(libs.hilt.android)
+    ksp(libs.hilt.android.compiler)
+
+    // Paging
     implementation(libs.androidx.paging.compose)
     implementation(libs.androidx.paging.common.android)
 
-    ksp(libs.hilt.android.compiler)
 
     // retrofit
     implementation (libs.retrofit)
