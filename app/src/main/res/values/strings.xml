@@ -3,4 +3,9 @@
     <string name="users">Users</string>
     <string name="repositories">Repositories</string>
     <string name="home">Home</string>
+    <string name="search">Search</string>
+    <string name="search_for_repositories">Search for repositories…</string>
+    <string name="empty_repo_search">Search Github for repositories, issues and pull requests!</string>
+    <string name="empty_users_search">Search Github for users…</string>
+    <string name="search_for_users">Search for users…</string>
 </resources>

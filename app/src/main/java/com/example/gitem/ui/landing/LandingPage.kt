@@ -33,6 +33,7 @@ import com.example.gitem.ui.theme.GitemTheme
 import com.example.gitem.ui.theme.LightPink
 import com.example.gitem.ui.theme.TealGreen
 import com.example.gitem.ui.theme.White_60
+import com.example.gitem.ui.uiutils.Header
 
 @Composable
 fun LandingPage(modifier: Modifier = Modifier) {
@@ -145,15 +146,4 @@ fun LandingPreview() {
     GitemTheme {
         LandingPage()
     }
-}
-
-@Composable
-fun Header(title: String, modifier: Modifier = Modifier) {
-    Text(
-        modifier = modifier,
-        text = title,
-        color = Color.Black,
-        fontSize = 18.sp,
-        fontWeight = FontWeight.Bold
-    )
 }

@@ -1,4 +1,4 @@
-package com.example.gitem.ui.searchrepos
+package com.example.gitem.ui.repositories
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
