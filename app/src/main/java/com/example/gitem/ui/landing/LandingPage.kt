@@ -88,10 +88,10 @@ private fun LandingCard(
 ) {
     Card(
         modifier = modifier
-            .clip(RoundedCornerShape(2.dp))
             .height(118.dp)
             .fillMaxWidth()
-            .border(.4.dp, color = Smudge)
+            .border(.4.dp, Smudge, shape = RoundedCornerShape(2.dp))
+            .clip(RoundedCornerShape(2.dp))
             .clickable {
                 onCardClick()
             },

@@ -17,7 +17,9 @@ android {
         versionName = "1.0"
 
         val hostname = "https://api.github.com/"
+        val apiKey = "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"
         buildConfigField("String", "HOST_NAME", "\"$hostname\"")
+        buildConfigField("String", "API_KEY", "\"$apiKey\"")
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables {
             useSupportLibrary = true
@@ -80,6 +82,13 @@ dependencies {
     implementation(libs.androidx.paging.common.android)
 
 
+    // ViewModel
+    implementation(libs.androidx.lifecycle.viewmodel.ktx)
+    implementation(libs.androidx.lifecycle.viewmodel.compose)
+
+    // Lifecycle compose
+    implementation(libs.androidx.lifecycle.runtime.compose)
+
     // retrofit
     implementation (libs.retrofit)
     implementation (libs.converter.gson)
@@ -90,6 +99,7 @@ dependencies {
     implementation (libs.accompanist.navigation.animation)
     implementation (libs.androidx.navigation.compose)
     implementation (libs.androidx.navigation.runtime)
+    implementation(libs.androidx.hilt.navigation.compose)
 
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)

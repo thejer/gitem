@@ -1,6 +1,7 @@
 package com.example.gitem.ui.repositories
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -22,6 +23,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
@@ -42,6 +44,7 @@ import com.example.gitem.ui.theme.GitemTheme
 import com.example.gitem.ui.theme.GoGreen
 import com.example.gitem.ui.theme.Iceberg
 import com.example.gitem.ui.theme.Navy
+import com.example.gitem.ui.theme.Smudge
 import com.example.gitem.ui.theme.White
 import com.example.gitem.ui.uiutils.HorizontalSpace
 import com.example.gitem.ui.uiutils.VerticalSpace
@@ -53,9 +56,15 @@ fun RepoItem(repoItemData: RepoItemData) {
         modifier = Modifier
             .fillMaxWidth()
             .wrapContentHeight()
-            .background(White)
-            .clip(RoundedCornerShape(2.dp)),
-        shape = RoundedCornerShape(2.dp)
+            .border(.4.dp, Smudge, shape = RoundedCornerShape(2.dp))
+            .clip(RoundedCornerShape(2.dp))
+            .shadow(
+                elevation = 2.dp,
+                shape = RoundedCornerShape(2.dp),
+                spotColor = Black.copy(.05f),
+                ambientColor = Black.copy(.05f)
+            )
+            .background(White),
     ) {
         Column(
             modifier = Modifier
@@ -80,16 +89,16 @@ fun RepoItem(repoItemData: RepoItemData) {
                 )
 
                 HorizontalSpace(8.dp)
-
+                val repoName = if (repoItemData.name.length > 10) "${repoItemData.name.take(10)}…" else repoItemData.name
                 Text(
                     text = "${repoItemData.owner.ownerName}/",
                     color = Burgundy,
                     fontSize = 12.sp,
-                    fontWeight = FontWeight.Normal
+                    fontWeight = FontWeight.Normal,
                 )
 
                 Text(
-                    text = repoItemData.name,
+                    text = repoName,
                     color = Black,
                     fontSize = 12.sp,
                     fontWeight = FontWeight.SemiBold

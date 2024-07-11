@@ -11,7 +11,6 @@ import retrofit2.HttpException
 import java.io.IOException
 
 private const val GITHUB_STARTING_PAGE_INDEX = 1
-private const val IN_QUALIFIER = "in:name,description"
 private const val NETWORK_PAGE_SIZE = 50
 
 class BasePagingSource<V : Any>(
@@ -28,7 +27,7 @@ class BasePagingSource<V : Any>(
 
     override suspend fun load(params: LoadParams<Int>): LoadResult<Int, V> {
         val page = params.key ?: GITHUB_STARTING_PAGE_INDEX
-        val apiQuery = query + IN_QUALIFIER
+        val apiQuery = query
 
         return try {
             val response = block(apiQuery, page, params.loadSize)

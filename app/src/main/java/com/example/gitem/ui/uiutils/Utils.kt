@@ -4,6 +4,7 @@ import androidx.annotation.StringRes
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -97,9 +98,9 @@ fun EmptyState(@StringRes title: Int) {
 @Composable
 fun SearchField(
     @StringRes hint: Int,
-    onTextChange: (String) -> Unit = {},
-    onSearchClicked: () -> Unit = {}
-) {
+    onSearchClicked: (String) -> Unit = {},
+    onTextChange: (String) -> Unit = {}
+    ) {
     Row(
         modifier = Modifier
             .border(
@@ -124,7 +125,7 @@ fun SearchField(
 
         BasicTextField(
             modifier = Modifier.weight(1f),
-            value = "",
+            value = text,
             textStyle = LocalTextStyle.current.copy(
                 fontSize = 10.sp,
                 fontWeight = FontWeight.Medium,
@@ -146,7 +147,7 @@ fun SearchField(
                 imeAction = ImeAction.Search
             ),
             keyboardActions = KeyboardActions(onSearch = {
-                onSearchClicked()
+                onSearchClicked(text)
             }),
             singleLine = true,
             onValueChange = {
@@ -159,6 +160,9 @@ fun SearchField(
         Box(
             modifier = Modifier
                 .width(84.dp)
+                .clickable {
+                    onSearchClicked(text)
+                }
                 .align(Alignment.CenterVertically)
                 .fillMaxHeight()
                 .padding(vertical = 4.dp, horizontal = 5.dp)
