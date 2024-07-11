@@ -25,6 +25,7 @@ import com.example.gitem.ui.uiutils.VerticalSpace
 @Composable
 fun SearchUsers(
     modifier: Modifier = Modifier,
+    onUserClicked: (Int) -> Unit = {},
     viewModel: SearchUsersViewModel = hiltViewModel()
 ) {
 
@@ -43,13 +44,12 @@ fun SearchUsers(
         VerticalSpace(31.dp)
 
         SearchField(
-            R.string.empty_users_search,
+            hint = R.string.search_for_users,
             onSearchClicked = {
                 viewModel.onQuery(it)
-            }
-        ) {
-            viewModel.onQuery(it)
-        }
+            },
+            onTextChange = viewModel.onQuery
+        )
 
         if (searchResult.itemCount == 0) {
             val emptyTitle = if (uiState.value.query.isNotEmpty())
@@ -60,16 +60,15 @@ fun SearchUsers(
             LazyColumn(verticalArrangement = Arrangement.spacedBy(5.dp)) {
                 items(count = searchResult.itemCount) { index ->
                     if (index == 0) VerticalSpace(height = 14.dp)
-
                     val userItemData = searchResult[index]?.toUserItemData()
                     userItemData?.let { user ->
-                        UserItem(userItemData = user)
+                        UserItem(userItemData = user) {
+                            onUserClicked(user.id)
+                        }
                     }
                 }
             }
         }
-
-        EmptyState(R.string.search_for_users)
     }
 }
 

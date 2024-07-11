@@ -3,6 +3,7 @@ plugins {
     alias(libs.plugins.jetbrains.kotlin.android)
     alias(libs.plugins.hilt.android)
     alias(libs.plugins.kotlin.android.ksp)
+    alias(libs.plugins.kotlin.serialization)
 }
 
 android {
@@ -71,10 +72,14 @@ dependencies {
     implementation(libs.androidx.ui.graphics)
     implementation(libs.androidx.ui.tooling.preview)
     implementation(libs.androidx.material3)
+
+    // Coil
     implementation(libs.coil.compose)
 
+    // Fonts
     implementation (libs.androidx.ui.text.google.fonts)
 
+    // Hilt
     implementation(libs.hilt.android)
     ksp(libs.hilt.android.compiler)
 
@@ -101,6 +106,9 @@ dependencies {
     implementation (libs.androidx.navigation.compose)
     implementation (libs.androidx.navigation.runtime)
     implementation(libs.androidx.hilt.navigation.compose)
+
+    // Kotlinx-Serialization
+    implementation(libs.kotlinx.serialization.json)
 
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)

@@ -42,13 +42,14 @@ import com.example.gitem.ui.uiutils.VerticalSpace
 
 @Composable
 fun UserDetails(
-    userId: Int,
+    modifier: Modifier = Modifier,
+    onBackPressed: () -> Unit = {},
     viewModel: UserDetailsViewModel = hiltViewModel()
 ) {
     val uiState = viewModel.uiState.collectAsStateWithLifecycle()
     
     Column(
-        modifier = Modifier
+        modifier = modifier
             .fillMaxSize()
             .background(White)
             .padding(vertical = 31.dp, horizontal = 20.dp)
@@ -57,9 +58,7 @@ fun UserDetails(
         Row(
             modifier = Modifier
                 .wrapContentSize()
-                .clickable {
-                    // Go back
-                },
+                .clickable { onBackPressed() },
             verticalAlignment = Alignment.CenterVertically
         ) {
             Icon(
@@ -136,62 +135,68 @@ private fun MainUserDetails(userDetailsData: UserDetailsData) {
 
         VerticalSpace(height = 15.dp)
 
-        Text(
-            text = userDetailsData.bio,
-            maxLines = 3,
-            overflow = TextOverflow.Ellipsis,
-            style = TextStyle(
-                fontSize = 12.sp,
-                fontFamily = ManropeFontFamily,
-                fontWeight = FontWeight.Medium,
-                color = Black
+        userDetailsData.bio?.let { bio ->
+            Text(
+                text = bio,
+                maxLines = 3,
+                overflow = TextOverflow.Ellipsis,
+                style = TextStyle(
+                    fontSize = 12.sp,
+                    fontFamily = ManropeFontFamily,
+                    fontWeight = FontWeight.Medium,
+                    color = Black
+                )
             )
-        )
+        }
         VerticalSpace(height = 10.dp)
 
         Row(
             verticalAlignment = Alignment.CenterVertically
         ) {
-            Icon(
-                modifier = Modifier
-                    .size(15.dp),
-                tint = Midnight_55,
-                painter = painterResource(id = R.drawable.ic_location),
-                contentDescription = stringResource(R.string.location)
-            )
-
-            HorizontalSpace(width = 6.dp)
-
-            Text(
-                text = userDetailsData.location,
-                style = TextStyle(
-                    color = Midnight_55,
-                    fontSize = 10.sp,
-                    fontFamily = ManropeFontFamily,
-                    fontWeight = FontWeight.Medium
+            userDetailsData.location?.let { location ->
+                Icon(
+                    modifier = Modifier
+                        .size(15.dp),
+                    tint = Midnight_55,
+                    painter = painterResource(id = R.drawable.ic_location),
+                    contentDescription = stringResource(R.string.location)
                 )
-            )
+
+                HorizontalSpace(width = 6.dp)
+
+                Text(
+                    text = location,
+                    style = TextStyle(
+                        color = Midnight_55,
+                        fontSize = 10.sp,
+                        fontFamily = ManropeFontFamily,
+                        fontWeight = FontWeight.Medium
+                    )
+                )
+            }
             HorizontalSpace(width = 8.dp)
 
-            Icon(
-                modifier = Modifier
-                    .size(15.dp),
-                tint = Midnight_55,
-                painter = painterResource(id = R.drawable.ic_link),
-                contentDescription = stringResource(R.string.blog_link)
-            )
-
-            HorizontalSpace(width = 6.dp)
-
-            Text(
-                text = userDetailsData.blog,
-                style = TextStyle(
-                    color = Midnight,
-                    fontSize = 10.sp,
-                    fontFamily = ManropeFontFamily,
-                    fontWeight = FontWeight.SemiBold
+            userDetailsData.blog?.let { blog ->
+                Icon(
+                    modifier = Modifier
+                        .size(15.dp),
+                    tint = Midnight_55,
+                    painter = painterResource(id = R.drawable.ic_link),
+                    contentDescription = stringResource(R.string.blog_link)
                 )
-            )
+
+                HorizontalSpace(width = 6.dp)
+
+                Text(
+                    text = blog,
+                    style = TextStyle(
+                        color = Midnight,
+                        fontSize = 10.sp,
+                        fontFamily = ManropeFontFamily,
+                        fontWeight = FontWeight.SemiBold
+                    )
+                )
+            }
         }
 
         VerticalSpace(height = 10.dp)
@@ -248,6 +253,12 @@ private fun MainUserDetails(userDetailsData: UserDetailsData) {
 @Composable
 fun UserDetailsPreview() {
     GitemTheme {
-        UserDetails(0)
+        MainUserDetails(defaultUserDetails().copy(
+            bio = "This is a random bio, which will be replace with actual content",
+            location = "Lagos, Nigeria",
+            name = "Paige Brown",
+            username = "DynamicWebPaige",
+            blog = "http://www.paige.com"
+        ))
     }
 }

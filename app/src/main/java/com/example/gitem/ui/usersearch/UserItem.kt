@@ -2,6 +2,7 @@ package com.example.gitem.ui.usersearch
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -35,12 +36,18 @@ import com.example.gitem.ui.theme.White
 import com.example.gitem.ui.uiutils.HorizontalSpace
 
 @Composable
-fun UserItem(userItemData: UserItemData) {
+fun UserItem(
+    userItemData: UserItemData,
+    onItemClick: () -> Unit = {}
+) {
 
     Card(
         modifier = Modifier
             .fillMaxWidth()
             .wrapContentHeight()
+            .clickable {
+                onItemClick()
+            }
             .border(.4.dp, Smudge, shape = RoundedCornerShape(2.dp))
             .clip(RoundedCornerShape(2.dp))
             .shadow(
@@ -55,14 +62,14 @@ fun UserItem(userItemData: UserItemData) {
         Row(
             modifier = Modifier
                 .background(White)
-                .padding(vertical = 9.dp, horizontal = 12.dp)
+                .padding(vertical = 16.dp, horizontal = 20.dp)
                 .wrapContentHeight()
                 .fillMaxWidth(),
             verticalAlignment = Alignment.CenterVertically
         ) {
             AsyncImage(
                 modifier = Modifier
-                    .size(20.dp)
+                    .size(40.dp)
                     .clip(CircleShape),
                 model = ImageRequest.Builder(LocalContext.current)
                     .data(userItemData.avatarUrl)
@@ -78,7 +85,7 @@ fun UserItem(userItemData: UserItemData) {
             Text(
                 text = userItemData.username,
                 color = Iceberg,
-                fontSize = 12.sp,
+                fontSize = 16.sp,
                 fontFamily = ManropeFontFamily,
                 fontWeight = FontWeight.SemiBold,
             )
@@ -92,6 +99,6 @@ fun UserItem(userItemData: UserItemData) {
 @Composable
 fun UserItemPreview() {
     GitemTheme {
-        UserItem(UserItemData("", "DynamicWebPaige"))
+        UserItem(UserItemData(0, "", "DynamicWebPaige"))
     }
 }

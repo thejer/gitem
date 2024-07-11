@@ -4,12 +4,12 @@ import com.example.gitem.data.model.GithubUserDetails
 
 data class UserDetailsData(
     val avatarUrl: String,
-    val bio: String,
-    val blog: String,
+    val bio: String?,
+    val blog: String?,
     val followers: Int,
     val following: Int,
     val id: Int,
-    val location: String,
+    val location: String?,
     val username: String,
     val name: String,
     val publicRepos: Int
