@@ -1,6 +1,7 @@
 package com.example.gitem.di
 
 import com.example.gitem.BuildConfig
+import com.example.gitem.BuildConfig.API_KEY
 import com.example.gitem.BuildConfig.HOST_NAME
 import com.example.gitem.data.GithubDataSource
 import com.example.gitem.data.MainGithubDataSource
@@ -13,6 +14,7 @@ import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
+import okhttp3.Interceptor
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
@@ -26,11 +28,11 @@ object AppModule {
     @Singleton
     fun provideHttpClient(
         loggingInterceptor: HttpLoggingInterceptor,
-//        paramInterceptor: Interceptor
+        authInterceptor: Interceptor
     ): OkHttpClient =
         OkHttpClient.Builder()
             .addInterceptor(loggingInterceptor)
-//            .addInterceptor(paramInterceptor)
+            .addInterceptor(authInterceptor)
             .addInterceptor(NetworkExceptionInterceptor())
             .build()
 
@@ -46,19 +48,16 @@ object AppModule {
             }
         }
 
-//    @Provides
-//    @Singleton
-//    fun provideParamInterceptor(): Interceptor =
-//        Interceptor { chain ->
-//            val url = chain.request().url.newBuilder()
-//                .addQueryParameter("apikey", API_KEY)
-//                .build()
-//            val requestBuilder = chain.request()
-//                .newBuilder()
-//                .url(url)
-//            val request = requestBuilder.build()
-//            chain.proceed(request)
-//        }
+    @Provides
+    @Singleton
+    fun provideAuthInterceptor(): Interceptor =
+        Interceptor { chain ->
+            val requestBuilder = chain.request().newBuilder()
+                .addHeader("Authorization", "Bearer $API_KEY")
+                .addHeader("Accept", "application/vnd.github+json")
+                .addHeader("X-GitHub-Api-Version", "2022-11-28")
+            chain.proceed(requestBuilder.build())
+        }
 
     @Provides
     @Singleton
