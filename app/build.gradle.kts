@@ -17,7 +17,7 @@ android {
         versionName = "1.0"
 
         val hostname = "https://api.github.com/"
-        val apiKey = "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"
+        val apiKey = ""
         buildConfigField("String", "HOST_NAME", "\"$hostname\"")
         buildConfigField("String", "API_KEY", "\"$apiKey\"")
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
@@ -73,6 +73,7 @@ dependencies {
     implementation(libs.androidx.material3)
     implementation(libs.coil.compose)
 
+    implementation (libs.androidx.ui.text.google.fonts)
 
     implementation(libs.hilt.android)
     ksp(libs.hilt.android.compiler)

@@ -1,12 +1,9 @@
-package com.example.gitem.ui.repositories
+package com.example.gitem.ui.userdetails
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.ExperimentalLayoutApi
-import androidx.compose.foundation.layout.FlowRow
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -24,8 +21,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.shadow
-import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
@@ -34,25 +29,24 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import coil.compose.AsyncImage
-import coil.request.ImageRequest
 import com.example.gitem.R
-import com.example.gitem.ui.theme.BabyBlue
+import com.example.gitem.ui.repositories.RepoItemData
+import com.example.gitem.ui.repositories.defaultRepoItemData
 import com.example.gitem.ui.theme.Black
 import com.example.gitem.ui.theme.Burgundy
 import com.example.gitem.ui.theme.GitemTheme
 import com.example.gitem.ui.theme.GoGreen
-import com.example.gitem.ui.theme.Iceberg
+import com.example.gitem.ui.theme.LightGrey
 import com.example.gitem.ui.theme.ManropeFontFamily
+import com.example.gitem.ui.theme.Midnight_55
 import com.example.gitem.ui.theme.Navy
 import com.example.gitem.ui.theme.Smudge
 import com.example.gitem.ui.theme.White
 import com.example.gitem.ui.uiutils.HorizontalSpace
 import com.example.gitem.ui.uiutils.VerticalSpace
 
-@OptIn(ExperimentalLayoutApi::class)
 @Composable
-fun RepoItem(repoItemData: RepoItemData) {
+fun UserRepoItem(repoItemData: RepoItemData) {
     Card(
         modifier = Modifier
             .fillMaxWidth()
@@ -73,23 +67,9 @@ fun RepoItem(repoItemData: RepoItemData) {
                 .padding(12.dp)
                 .fillMaxWidth()
                 .wrapContentHeight()
-            ) {
+        ) {
 
             Row (Modifier, verticalAlignment = Alignment.CenterVertically) {
-                AsyncImage(
-                    modifier = Modifier
-                        .size(20.dp)
-                        .clip(CircleShape),
-                    model = ImageRequest.Builder(LocalContext.current)
-                        .data(repoItemData.owner.avatarUrl)
-                        .crossfade(true)
-                        .build(),
-                    contentScale = ContentScale.Crop,
-                    contentDescription = repoItemData.owner.ownerName,
-                    placeholder = painterResource(id = R.drawable.placeholder_avatar)
-                )
-
-                HorizontalSpace(8.dp)
                 val repoName = if (repoItemData.name.length > 10) "${repoItemData.name.take(10)}…" else repoItemData.name
                 Text(
                     text = "${repoItemData.owner.ownerName}/",
@@ -106,6 +86,10 @@ fun RepoItem(repoItemData: RepoItemData) {
                     fontFamily = ManropeFontFamily,
                     fontWeight = FontWeight.SemiBold
                 )
+
+                HorizontalSpace(width = 9.dp)
+
+                PrivatePill(isPrivate = repoItemData.private)
 
                 HorizontalSpace(modifier = Modifier
                     .weight(1f), width = 0.dp)
@@ -152,7 +136,6 @@ fun RepoItem(repoItemData: RepoItemData) {
             }
             repoItemData.description?.let {
                 VerticalSpace(height = 12.dp)
-                
                 Text(
                     modifier = Modifier
                         .fillMaxWidth()
@@ -168,56 +151,72 @@ fun RepoItem(repoItemData: RepoItemData) {
                     )
                 )
             }
-            if (repoItemData.topics.isNotEmpty()) {
-                VerticalSpace(height = 16.dp)
-                FlowRow (
-                    horizontalArrangement = Arrangement.spacedBy(6.dp),
-                    verticalArrangement = Arrangement.spacedBy(10.dp),
 
-                ) {
-                    repoItemData.topics.forEach {
-                        TopicPill(topic = it)
-                    }
-                }
+            VerticalSpace(height = 7.dp)
+
+            Row {
+                val forkedText = if (repoItemData.isForked) R.string.forked else R.string.not_forked
+                Text(
+                    text = stringResource(forkedText),
+                    style = TextStyle(
+                        fontSize = 10.sp,
+                        color = Midnight_55,
+                        fontFamily = ManropeFontFamily,
+                        fontWeight = FontWeight.Normal
+                    )
+                )
+
+                HorizontalSpace(width = 17.dp)
+
+                Text(
+                    text = "Updated 4 days ago",
+                    style = TextStyle(
+                        fontSize = 10.sp,
+                        color = Midnight_55,
+                        fontFamily = ManropeFontFamily,
+                        fontWeight = FontWeight.Normal
+                    )
+                )
             }
         }
     }
 }
 
-@Preview(showBackground = true)
 @Composable
-fun RepoItemPreview() {
-    GitemTheme {
-        RepoItem(defaultRepoItemData)
-    }
-}
-
-@Composable
-fun TopicPill(topic: String) {
+fun PrivatePill(isPrivate: Boolean) {
     Box(
         modifier = Modifier
             .wrapContentSize()
-            .clip(RoundedCornerShape(6.dp))
-            .background(BabyBlue)
+            .border(.5.dp, LightGrey, shape = RoundedCornerShape(5.dp))
+            .clip(RoundedCornerShape(5.dp))
+            .background(White)
     ) {
+        val visibilityText = if (isPrivate) R.string.is_private else R.string.is_public
         Text(
             modifier = Modifier.padding(vertical = 4.dp, horizontal = 7.dp),
-            text = topic,
+            text = stringResource(visibilityText),
             style = TextStyle(
-                color = Iceberg,
-                fontSize = 10.sp,
-                fontFamily = ManropeFontFamily,
-                fontWeight = FontWeight.SemiBold
+                color = Black,
+                fontSize = 8.sp,
+                fontWeight = FontWeight.Normal
             )
         )
     }
 }
 
+@Preview(showBackground = true)
+@Composable
+fun PrivatePillPreview() {
+    GitemTheme {
+        PrivatePill(true)
+    }
+}
+
 
 @Preview(showBackground = true)
 @Composable
-fun TopicPreview() {
+fun UserRepoItemPreview() {
     GitemTheme {
-        TopicPill("Design System")
+        UserRepoItem(defaultRepoItemData)
     }
 }

@@ -6,8 +6,8 @@ import com.example.gitem.BuildConfig.HOST_NAME
 import com.example.gitem.data.GithubDataSource
 import com.example.gitem.data.MainGithubDataSource
 import com.example.gitem.data.remote.ApiService
-import com.example.gitem.data.repo.GithubRepository
-import com.example.gitem.data.repo.MainGithubRepository
+import com.example.gitem.data.repo.GitemRepository
+import com.example.gitem.data.repo.MainGitemRepository
 import com.example.gitem.utils.NetworkExceptionInterceptor
 import com.google.gson.Gson
 import dagger.Module
@@ -95,6 +95,6 @@ object AppModule {
 
     @Provides
     @Singleton
-    fun provideRepository(githubDataSource: GithubDataSource): GithubRepository =
-        MainGithubRepository(githubDataSource)
+    fun provideRepository(githubDataSource: GithubDataSource): GitemRepository =
+        MainGitemRepository(githubDataSource)
 }

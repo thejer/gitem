@@ -31,6 +31,7 @@ import androidx.compose.ui.unit.sp
 import com.example.gitem.R
 import com.example.gitem.ui.theme.GitemTheme
 import com.example.gitem.ui.theme.LightPink
+import com.example.gitem.ui.theme.ManropeFontFamily
 import com.example.gitem.ui.theme.Smudge
 import com.example.gitem.ui.theme.TealGreen
 import com.example.gitem.ui.theme.White
@@ -125,6 +126,7 @@ private fun LandingCard(
                 text = title,
                 color = Color.Black,
                 fontSize = 16.sp,
+                fontFamily = ManropeFontFamily,
                 fontWeight = FontWeight.Bold
             )
         }

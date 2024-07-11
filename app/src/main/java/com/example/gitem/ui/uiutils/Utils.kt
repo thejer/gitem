@@ -44,6 +44,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.gitem.R
 import com.example.gitem.ui.theme.LightGrey
+import com.example.gitem.ui.theme.ManropeFontFamily
 import com.example.gitem.ui.theme.MidGrey
 import com.example.gitem.ui.theme.Navy
 import com.example.gitem.ui.theme.RainGrey
@@ -56,6 +57,7 @@ fun Header(title: String, modifier: Modifier = Modifier) {
         text = title,
         color = Color.Black,
         fontSize = 18.sp,
+        fontFamily = ManropeFontFamily,
         fontWeight = FontWeight.Bold
     )
 }
@@ -89,8 +91,9 @@ fun EmptyState(@StringRes title: Int) {
                 text = stringResource(id = title),
                 textAlign = TextAlign.Center,
                 color = MidGrey,
-                fontSize = 12.sp
-            )
+                fontSize = 12.sp,
+                fontFamily = ManropeFontFamily
+                )
         }
     }
 }
@@ -137,6 +140,7 @@ fun SearchField(
                         text = stringResource(id = hint),
                         color = RainGrey,
                         fontSize = 10.sp,
+                        fontFamily = ManropeFontFamily,
                         fontWeight = FontWeight.Medium,
                     )
                 }
@@ -174,7 +178,8 @@ fun SearchField(
                 text = stringResource(R.string.search),
                 color = White,
                 fontSize = 10.sp,
-            )
+                fontFamily = ManropeFontFamily,
+                )
         }
     }
 }

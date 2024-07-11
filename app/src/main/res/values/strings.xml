@@ -9,5 +9,16 @@
     <string name="empty_users_search">Search Github for users…</string>
     <string name="search_for_users">Search for users…</string>
     <string name="star">Star</string>
-    <string name="no_results">We’ve searched the ends of the earth, repository not found, please try again</string>
+    <string name="repo_no_results">We’ve searched the ends of the earth, repository not found, please try again</string>
+    <string name="is_private">Private</string>
+    <string name="is_public">Public</string>
+    <string name="not_forked">Not Forked</string>
+    <string name="forked">Forked</string>
+    <string name="users_no_results">We’ve searched the ends of the earth and we’ve not found this user, please try again</string>
+    <string name="back_button">Back button</string>
+    <string name="location">Location</string>
+    <string name="blog_link">Blog Link</string>
+    <string name="followers">Followers</string>
+    <string name="followers_template">%s followers</string>
+    <string name="following_template">%1$s following</string>
 </resources>

@@ -10,6 +10,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.navigation.NavController
 import androidx.navigation.compose.currentBackStackEntryAsState
+import com.example.gitem.ui.theme.ManropeFontFamily
 
 @Composable
 fun BottomNavigationBar(navController: NavController) {
@@ -39,7 +40,12 @@ fun BottomNavigationBar(navController: NavController) {
                         contentDescription = null,
                     )
                 },
-                label = { Text(stringResource(id = item.label)) }
+                label = {
+                    Text(
+                        text = stringResource(id = item.label),
+                        fontFamily = ManropeFontFamily,
+                    )
+                }
             )
         }
     }

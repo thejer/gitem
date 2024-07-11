@@ -1,4 +1,4 @@
-package com.example.gitem.ui.repositories
+package com.example.gitem.ui.usersearch
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -13,10 +13,8 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import androidx.paging.compose.LazyPagingItems
 import androidx.paging.compose.collectAsLazyPagingItems
 import com.example.gitem.R
-import com.example.gitem.data.model.GithubRepo
 import com.example.gitem.ui.theme.GitemTheme
 import com.example.gitem.ui.theme.White
 import com.example.gitem.ui.uiutils.EmptyState
@@ -25,13 +23,14 @@ import com.example.gitem.ui.uiutils.SearchField
 import com.example.gitem.ui.uiutils.VerticalSpace
 
 @Composable
-fun SearchRepositories(
+fun SearchUsers(
     modifier: Modifier = Modifier,
-    viewModel: SearchRepositoriesViewModel = hiltViewModel()
+    viewModel: SearchUsersViewModel = hiltViewModel()
 ) {
 
     val searchResult = viewModel.pagingDataFlow.collectAsLazyPagingItems()
     val uiState = viewModel.state.collectAsStateWithLifecycle()
+
     Column(
         modifier = modifier
             .fillMaxSize()
@@ -39,11 +38,12 @@ fun SearchRepositories(
             .padding(start = 21.dp, top = 40.dp, end = 21.dp)
     ) {
 
-        Header(title = stringResource(R.string.repositories))
+        Header(title = stringResource(R.string.users))
 
         VerticalSpace(31.dp)
 
-        SearchField(R.string.search_for_repositories,
+        SearchField(
+            R.string.empty_users_search,
             onSearchClicked = {
                 viewModel.onQuery(it)
             }
@@ -53,35 +53,30 @@ fun SearchRepositories(
 
         if (searchResult.itemCount == 0) {
             val emptyTitle = if (uiState.value.query.isNotEmpty())
-                R.string.repo_no_results
-            else R.string.empty_repo_search
+                R.string.users_no_results
+            else R.string.empty_users_search
             EmptyState(emptyTitle)
         } else {
-            RepoSearchResultList(searchResult)
-        }
-    }
-}
+            LazyColumn(verticalArrangement = Arrangement.spacedBy(5.dp)) {
+                items(count = searchResult.itemCount) { index ->
+                    if (index == 0) VerticalSpace(height = 14.dp)
 
-@Composable
-private fun RepoSearchResultList(searchResult: LazyPagingItems<GithubRepo>) {
-
-    LazyColumn(verticalArrangement = Arrangement.spacedBy(5.dp)) {
-        items(count = searchResult.itemCount) { index ->
-            if (index == 0) VerticalSpace(height = 14.dp)
-
-            val repoItemData = searchResult[index]?.toRepoItemData()
-            repoItemData?.let { repo ->
-                RepoItem(repoItemData = repo)
+                    val userItemData = searchResult[index]?.toUserItemData()
+                    userItemData?.let { user ->
+                        UserItem(userItemData = user)
+                    }
+                }
             }
         }
+
+        EmptyState(R.string.search_for_users)
     }
 }
-
 
 @Preview(showBackground = true)
 @Composable
-fun SearchRepositoriesPreview() {
+fun GreetingPreview() {
     GitemTheme {
-        SearchRepositories()
+        SearchUsers()
     }
 }
