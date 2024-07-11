@@ -8,4 +8,5 @@
     <string name="empty_repo_search">Search Github for repositories, issues and pull requests!</string>
     <string name="empty_users_search">Search Github for users…</string>
     <string name="search_for_users">Search for users…</string>
+    <string name="star">Star</string>
 </resources>

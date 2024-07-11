@@ -11,11 +11,11 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.example.gitem.ui.theme.GitemTheme
+import com.example.gitem.ui.theme.White
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -41,7 +41,7 @@ class MainActivity : ComponentActivity() {
             val paddingValues = PaddingValues(bottom = innerPadding.calculateBottomPadding())
             NavigationHost(
                 modifier = Modifier
-                    .background(Color.White)
+                    .background(White)
                     .padding(paddingValues = paddingValues),
                 navController = navController
             )

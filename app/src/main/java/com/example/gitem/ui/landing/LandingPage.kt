@@ -3,12 +3,12 @@ package com.example.gitem.ui.landing
 import androidx.annotation.DrawableRes
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -31,21 +31,24 @@ import androidx.compose.ui.unit.sp
 import com.example.gitem.R
 import com.example.gitem.ui.theme.GitemTheme
 import com.example.gitem.ui.theme.LightPink
+import com.example.gitem.ui.theme.Smudge
 import com.example.gitem.ui.theme.TealGreen
+import com.example.gitem.ui.theme.White
 import com.example.gitem.ui.theme.White_60
 import com.example.gitem.ui.uiutils.Header
+import com.example.gitem.ui.uiutils.VerticalSpace
 
 @Composable
 fun LandingPage(modifier: Modifier = Modifier) {
     Column (
         modifier = modifier
             .fillMaxSize()
-            .background(Color.White)
+            .background(White)
             .padding(start = 20.dp, top = 40.dp, end = 20.dp)
     ){
         Header(title = stringResource(R.string.home))
 
-        Spacer(modifier = Modifier.height(31.dp))
+        VerticalSpace(31.dp)
 
         Row (
             modifier = Modifier
@@ -88,6 +91,7 @@ private fun LandingCard(
             .clip(RoundedCornerShape(2.dp))
             .height(118.dp)
             .fillMaxWidth()
+            .border(.4.dp, color = Smudge)
             .clickable {
                 onCardClick()
             },
@@ -113,7 +117,7 @@ private fun LandingCard(
                 )
             }
 
-            Spacer(modifier = Modifier.height(41.dp))
+            VerticalSpace(41.dp)
 
             Text(
                 modifier = Modifier

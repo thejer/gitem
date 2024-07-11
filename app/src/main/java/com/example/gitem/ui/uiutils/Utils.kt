@@ -38,6 +38,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.gitem.R
@@ -45,6 +46,7 @@ import com.example.gitem.ui.theme.LightGrey
 import com.example.gitem.ui.theme.MidGrey
 import com.example.gitem.ui.theme.Navy
 import com.example.gitem.ui.theme.RainGrey
+import com.example.gitem.ui.theme.White
 
 @Composable
 fun Header(title: String, modifier: Modifier = Modifier) {
@@ -76,7 +78,7 @@ fun EmptyState(@StringRes title: Int) {
                 contentDescription = stringResource(title)
             )
 
-            Spacer(modifier = Modifier.height(28.dp))
+            VerticalSpace(28.dp)
 
             Text(
                 modifier = Modifier
@@ -116,7 +118,7 @@ fun SearchField(
             contentDescription = "Repository search"
         )
 
-        Spacer(modifier = Modifier.width(10.dp))
+        HorizontalSpace(width = 10.dp)
 
         var text by remember { mutableStateOf("") }
 
@@ -166,9 +168,20 @@ fun SearchField(
         ) {
             Text(
                 text = stringResource(R.string.search),
-                color = Color.White,
+                color = White,
                 fontSize = 10.sp,
             )
         }
     }
+}
+
+@Composable
+fun HorizontalSpace(width: Dp, modifier: Modifier = Modifier) {
+    Spacer(modifier = modifier.width(width))
+}
+
+
+@Composable
+fun VerticalSpace(height: Dp, modifier: Modifier = Modifier) {
+    Spacer(modifier = modifier.height(height))
 }
