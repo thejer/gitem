@@ -26,7 +26,7 @@ class MainGitemRepository @Inject constructor(
             githubDataSource.searchUser(apiQuery, page, size).items
         }
 
-    override fun getUserDetails(userId: Int): Flow<GithubUserDetails> = flow {
+    override fun getUserDetails(userId: Int): Flow<Result<GithubUserDetails>> = flow {
         emit(githubDataSource.getUserDetails(userId))
     }.flowOn(Dispatchers.IO)
 
@@ -34,14 +34,5 @@ class MainGitemRepository @Inject constructor(
         createPager(userId, false) { id, page, size ->
             githubDataSource.getUserRepos(id, page, size)
         }
-//        flow {
-//        emit(githubDataSource.getUserRepos(userId, page, itemsPerPage))
-//    }.flowOn(Dispatchers.IO)
 
-//    override fun getUserDetailsWithRepos(userId: Int): Flow<Pair<GithubUserDetails, List<GithubRepo>>> =
-//        combine(
-//             getUserDetails(userId),
-//             getUserRepos(userId, 1, 3),
-//             ::Pair
-//         )
 }

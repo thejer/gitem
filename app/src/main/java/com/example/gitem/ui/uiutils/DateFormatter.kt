@@ -7,7 +7,7 @@ import java.time.Period
 import java.time.ZonedDateTime
 import java.time.format.DateTimeFormatter
 
-fun getDateFormat(context: Context, pastDateString: String): String {
+fun getElapsedPeriod(context: Context, pastDateString: String): String {
     val formatter = DateTimeFormatter.ISO_DATE_TIME
     val pastDate = ZonedDateTime.parse(pastDateString, formatter)
 

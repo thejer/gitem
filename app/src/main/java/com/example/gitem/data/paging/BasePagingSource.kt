@@ -8,6 +8,7 @@ import androidx.paging.PagingState
 import kotlinx.coroutines.flow.Flow
 import retrofit2.HttpException
 import java.io.IOException
+import java.net.SocketTimeoutException
 
 private const val GITHUB_STARTING_PAGE_INDEX = 1
 private const val NETWORK_PAGE_SIZE = 50
@@ -30,21 +31,22 @@ class BasePagingSource<V : Any>(
 
         return try {
             val response = block(queryKey, page, params.loadSize)
-            val repos = response
 
-            val nextKey = if (repos.isEmpty()) {
+            val nextKey = if (response.isEmpty()) {
                 null
             } else {
                 page + (params.loadSize / NETWORK_PAGE_SIZE)
             }
             LoadResult.Page(
-                data = repos,
+                data = response,
                 prevKey = if (page == GITHUB_STARTING_PAGE_INDEX) null else page - 1,
                 nextKey = nextKey
             )
         } catch (exception: IOException) {
             return LoadResult.Error(exception)
         } catch (exception: HttpException) {
+            return LoadResult.Error(exception)
+        } catch (exception: SocketTimeoutException) {
             return LoadResult.Error(exception)
         }
     }

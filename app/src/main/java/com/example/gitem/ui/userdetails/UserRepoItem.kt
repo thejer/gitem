@@ -45,7 +45,7 @@ import com.example.gitem.ui.theme.Smudge
 import com.example.gitem.ui.theme.White
 import com.example.gitem.ui.uiutils.HorizontalSpace
 import com.example.gitem.ui.uiutils.VerticalSpace
-import com.example.gitem.ui.uiutils.getDateFormat
+import com.example.gitem.ui.uiutils.getElapsedPeriod
 
 @Composable
 fun UserRepoItem(repoItemData: RepoItemData) {
@@ -172,7 +172,7 @@ fun UserRepoItem(repoItemData: RepoItemData) {
                 HorizontalSpace(width = 17.dp)
 
                 Text(
-                    text = getDateFormat(
+                    text = getElapsedPeriod(
                         context = LocalContext.current,
                         pastDateString = repoItemData.updatedDate
                     ),

@@ -32,6 +32,16 @@ class MainGithubDataSource @Inject constructor(
     ): List<GithubRepo> =
         apiService.getGithubUserRepos(userId, page, itemsPerPage)
 
-    override suspend fun getUserDetails(userId: Int): GithubUserDetails =
-        apiService.getGithubUser(userId)
+    override suspend fun getUserDetails(userId: Int): Result<GithubUserDetails> {
+        return try {
+            val response = apiService.getGithubUser(userId)
+            if (response.isSuccessful && response.body() != null) {
+                Result.success(response.body() ?: throw Exception("Response body is null"))
+            } else {
+                Result.failure(Exception("Error fetching user details"))
+            }
+        } catch (exception: Exception) {
+            Result.failure(exception)
+        }
+    }
 }
