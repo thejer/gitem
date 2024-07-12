@@ -6,7 +6,10 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.LazyListState
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
@@ -23,6 +26,8 @@ import com.example.gitem.ui.uiutils.EmptyState
 import com.example.gitem.ui.uiutils.Header
 import com.example.gitem.ui.uiutils.SearchField
 import com.example.gitem.ui.uiutils.VerticalSpace
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.launch
 
 @Composable
 fun SearchRepositories(
@@ -32,6 +37,9 @@ fun SearchRepositories(
 
     val searchResult = viewModel.pagingDataFlow.collectAsLazyPagingItems()
     val uiState = viewModel.state.collectAsStateWithLifecycle()
+    val coroutineScope = rememberCoroutineScope()
+    val listState = rememberLazyListState()
+
     Column(
         modifier = modifier
             .fillMaxSize()
@@ -45,10 +53,20 @@ fun SearchRepositories(
 
         SearchField(R.string.search_for_repositories,
             onSearchClicked = {
-                viewModel.onQuery(it)
+                searchAndScroll(
+                    coroutineScope,
+                    listState,
+                    viewModel,
+                    it
+                )
             }
         ) {
-            viewModel.onQuery(it)
+            searchAndScroll(
+                coroutineScope,
+                listState,
+                viewModel,
+                it
+            )
         }
 
         if (searchResult.itemCount == 0) {
@@ -57,15 +75,18 @@ fun SearchRepositories(
             else R.string.empty_repo_search
             EmptyState(emptyTitle)
         } else {
-            RepoSearchResultList(searchResult)
+            RepoSearchResultList(searchResult, listState)
         }
     }
 }
 
 @Composable
-private fun RepoSearchResultList(searchResult: LazyPagingItems<GithubRepo>) {
+private fun RepoSearchResultList(
+    searchResult: LazyPagingItems<GithubRepo>,
+    listState: LazyListState
+) {
 
-    LazyColumn(verticalArrangement = Arrangement.spacedBy(5.dp)) {
+    LazyColumn(verticalArrangement = Arrangement.spacedBy(5.dp), state = listState) {
         items(count = searchResult.itemCount) { index ->
             if (index == 0) VerticalSpace(height = 14.dp)
 
@@ -75,6 +96,19 @@ private fun RepoSearchResultList(searchResult: LazyPagingItems<GithubRepo>) {
             }
         }
     }
+}
+
+
+private fun searchAndScroll(
+    coroutineScope: CoroutineScope,
+    listState: LazyListState,
+    viewModel: SearchRepositoriesViewModel,
+    query: String
+) {
+    coroutineScope.launch {
+        listState.animateScrollToItem(0)
+    }
+    viewModel.onQuery(query)
 }
 
 

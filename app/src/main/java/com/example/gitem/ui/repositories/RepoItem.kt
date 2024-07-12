@@ -137,7 +137,8 @@ fun RepoItem(repoItemData: RepoItemData) {
                             .clip(CircleShape)
                             .background(GoGreen)
                     )
-                    HorizontalSpace(width = 1.dp)
+
+                    HorizontalSpace(width = 3.dp)
 
                     Text(
                         text = it,

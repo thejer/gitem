@@ -25,8 +25,12 @@ class MainGithubDataSource @Inject constructor(
     ): GithubSearchResponse<GithubUser> =
         apiService.searchGithubUsers(query, page, itemsPerPage)
 
-    override suspend fun getUserRepos(userId: Int): List<GithubRepo> =
-        apiService.getGithubUserRepos(userId)
+    override suspend fun getUserRepos(
+        userId: String,
+        page: Int,
+        itemsPerPage: Int
+    ): List<GithubRepo> =
+        apiService.getGithubUserRepos(userId, page, itemsPerPage)
 
     override suspend fun getUserDetails(userId: Int): GithubUserDetails =
         apiService.getGithubUser(userId)

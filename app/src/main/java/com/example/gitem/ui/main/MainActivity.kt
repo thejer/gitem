@@ -45,7 +45,7 @@ class MainActivity : ComponentActivity() {
             }) { innerPadding ->
             val paddingValues = PaddingValues(
                 start = innerPadding.calculateStartPadding(LayoutDirection.Ltr),
-                end = innerPadding.calculateEndPadding(LayoutDirection.Ltr)
+                end = innerPadding.calculateEndPadding(LayoutDirection.Ltr),
             )
             NavigationHost(
                 modifier = Modifier

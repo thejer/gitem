@@ -6,7 +6,10 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.LazyListState
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
@@ -21,6 +24,8 @@ import com.example.gitem.ui.uiutils.EmptyState
 import com.example.gitem.ui.uiutils.Header
 import com.example.gitem.ui.uiutils.SearchField
 import com.example.gitem.ui.uiutils.VerticalSpace
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.launch
 
 @Composable
 fun SearchUsers(
@@ -31,6 +36,8 @@ fun SearchUsers(
 
     val searchResult = viewModel.pagingDataFlow.collectAsLazyPagingItems()
     val uiState = viewModel.state.collectAsStateWithLifecycle()
+    val coroutineScope = rememberCoroutineScope()
+    val listState = rememberLazyListState()
 
     Column(
         modifier = modifier
@@ -46,9 +53,11 @@ fun SearchUsers(
         SearchField(
             hint = R.string.search_for_users,
             onSearchClicked = {
-                viewModel.onQuery(it)
+                searchAndScroll(coroutineScope, listState, viewModel, it)
             },
-            onTextChange = viewModel.onQuery
+            onTextChange = {
+                searchAndScroll(coroutineScope, listState, viewModel, it)
+            }
         )
 
         if (searchResult.itemCount == 0) {
@@ -57,7 +66,7 @@ fun SearchUsers(
             else R.string.empty_users_search
             EmptyState(emptyTitle)
         } else {
-            LazyColumn(verticalArrangement = Arrangement.spacedBy(5.dp)) {
+            LazyColumn(verticalArrangement = Arrangement.spacedBy(5.dp), state = listState) {
                 items(count = searchResult.itemCount) { index ->
                     if (index == 0) VerticalSpace(height = 14.dp)
                     val userItemData = searchResult[index]?.toUserItemData()
@@ -70,6 +79,18 @@ fun SearchUsers(
             }
         }
     }
+}
+
+private fun searchAndScroll(
+    coroutineScope: CoroutineScope,
+    listState: LazyListState,
+    viewModel: SearchUsersViewModel,
+    query: String
+) {
+    coroutineScope.launch {
+        listState.animateScrollToItem(0)
+    }
+    viewModel.onQuery(query)
 }
 
 @Preview(showBackground = true)

@@ -59,5 +59,4 @@ class SearchRepositoriesViewModel @Inject constructor(
 
 data class UiState(
     val query: String = "",
-//    val hasNotScrolledForCurrentSearch: Boolean = false
 )

@@ -31,6 +31,8 @@ interface ApiService {
 
     @GET("user/{userId}/repos")
     suspend fun getGithubUserRepos(
-        @Path("userId") userId: Int,
+        @Path("userId") userId: String,
+        @Query("page") page: Int,
+        @Query("per_page") itemsPerPage: Int
     ): List<GithubRepo>
 }

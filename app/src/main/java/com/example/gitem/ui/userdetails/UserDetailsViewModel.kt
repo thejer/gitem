@@ -3,10 +3,12 @@ package com.example.gitem.ui.userdetails
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import androidx.paging.PagingData
+import androidx.paging.cachedIn
+import com.example.gitem.data.model.GithubRepo
 import com.example.gitem.data.repo.GitemRepository
-import com.example.gitem.ui.repositories.RepoItemData
-import com.example.gitem.ui.repositories.toRepoItemData
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.collectLatest
@@ -25,24 +27,29 @@ class UserDetailsViewModel @Inject constructor(
     private val _uiState = MutableStateFlow(UiState())
     val uiState = _uiState.asStateFlow()
 
+    val pagingDataFlow: Flow<PagingData<GithubRepo>>
+
+
     init {
         getUserDetails(userId)
+        pagingDataFlow = getUserRepos(userId).cachedIn(viewModelScope)
     }
+
     private fun getUserDetails(userId: Int) = viewModelScope.launch {
-        repository.getUserDetailsWithRepos(userId)
-            .collectLatest { userPair ->
+        repository.getUserDetails(userId)
+            .collectLatest { userDetails ->
                 _uiState.update { state ->
                     state.copy(
-                        userDetailsData = userPair.first.toUserDetailsData(),
-                        userRepos = userPair.second.map { it.toRepoItemData() }
+                        userDetailsData = userDetails.toUserDetailsData(),
                     )
                 }
             }
     }
+
+    private fun getUserRepos(userId: Int): Flow<PagingData<GithubRepo>> = repository.getUserReposStream(userId.toString())
 }
 
 
 data class UiState(
     val userDetailsData: UserDetailsData = defaultUserDetails(),
-    val userRepos: List<RepoItemData> = emptyList()
 )

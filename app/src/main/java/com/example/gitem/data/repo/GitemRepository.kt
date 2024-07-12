@@ -14,7 +14,7 @@ interface GitemRepository {
 
     fun getUserDetails(userId: Int): Flow<GithubUserDetails>
 
-    fun getUserRepos(userId: Int): Flow<List<GithubRepo>>
+    fun getUserReposStream(userId: String): Flow<PagingData<GithubRepo>>
 
-    fun getUserDetailsWithRepos(userId: Int): Flow<Pair<GithubUserDetails, List<GithubRepo>>>
+//    fun getUserDetailsWithRepos(userId: Int): Flow<Pair<GithubUserDetails, List<GithubRepo>>>
 }
