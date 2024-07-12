@@ -111,6 +111,8 @@ dependencies {
     // Kotlinx-Serialization
     implementation(libs.kotlinx.serialization.json)
 
+    // Splash
+    implementation (libs.androidx.core.splashscreen)
 
     testImplementation(libs.mockito.core)
     testImplementation(libs.mockito.kotlin)
