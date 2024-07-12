@@ -1,11 +1,12 @@
-package com.example.gitem.ui.repositories
+package com.example.gitem.ui.usersearch
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.paging.PagingData
 import androidx.paging.cachedIn
-import com.example.gitem.data.model.GithubRepo
+import com.example.gitem.data.model.GithubUser
 import com.example.gitem.data.repo.GitemRepository
+import com.example.gitem.ui.repositories.UiState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableSharedFlow
@@ -20,13 +21,12 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class SearchRepositoriesViewModel @Inject constructor(
-    private val repository: GitemRepository,
+class SearchUsersViewModel @Inject constructor(
+    private val repository: GitemRepository
 ): ViewModel() {
-
     val state: StateFlow<UiState>
 
-    val pagingDataFlow: Flow<PagingData<GithubRepo>>
+    val pagingDataFlow: Flow<PagingData<GithubUser>>
 
     val onQuery: (String) -> Unit
 
@@ -39,7 +39,7 @@ class SearchRepositoriesViewModel @Inject constructor(
             .onStart { emit(initialQuery) }
 
         pagingDataFlow = searches
-            .flatMapLatest { searchRepo(it) }
+            .flatMapLatest { searchUser(it) }
             .cachedIn(viewModelScope)
 
         state = searches
@@ -54,9 +54,5 @@ class SearchRepositoriesViewModel @Inject constructor(
         }
     }
 
-    private fun searchRepo(queryString: String): Flow<PagingData<GithubRepo>> = repository.getRepoSearchResultStream(queryString)
+    private fun searchUser(queryString: String): Flow<PagingData<GithubUser>> = repository.getUserSearchResultStream(queryString)
 }
-
-data class UiState(
-    val query: String = "",
-)

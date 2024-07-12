@@ -15,6 +15,12 @@ data class GithubRepo(
     val stars: Int,
     @field:SerializedName("language")
     val language: String?,
+    @field:SerializedName("updated_at")
+    val updatedDate: String,
+    @field:SerializedName("private")
+    val private: Boolean,
+    @field:SerializedName("fork")
+    val isForked: Boolean,
     @field:SerializedName("topics")
     val topics: List<String>,
     @field:SerializedName("owner")

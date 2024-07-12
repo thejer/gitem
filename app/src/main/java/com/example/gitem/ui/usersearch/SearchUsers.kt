@@ -1,4 +1,4 @@
-package com.example.gitem.ui.repositories
+package com.example.gitem.ui.usersearch
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -16,10 +16,8 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import androidx.paging.compose.LazyPagingItems
 import androidx.paging.compose.collectAsLazyPagingItems
 import com.example.gitem.R
-import com.example.gitem.data.model.GithubRepo
 import com.example.gitem.ui.theme.GitemTheme
 import com.example.gitem.ui.theme.White
 import com.example.gitem.ui.uiutils.EmptyState
@@ -30,9 +28,10 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 
 @Composable
-fun SearchRepositories(
+fun SearchUsers(
     modifier: Modifier = Modifier,
-    viewModel: SearchRepositoriesViewModel = hiltViewModel()
+    onUserClicked: (Int) -> Unit = {},
+    viewModel: SearchUsersViewModel = hiltViewModel()
 ) {
 
     val searchResult = viewModel.pagingDataFlow.collectAsLazyPagingItems()
@@ -47,62 +46,45 @@ fun SearchRepositories(
             .padding(start = 21.dp, top = 40.dp, end = 21.dp)
     ) {
 
-        Header(title = stringResource(R.string.repositories))
+        Header(title = stringResource(R.string.users))
 
         VerticalSpace(31.dp)
 
-        SearchField(R.string.search_for_repositories,
+        SearchField(
+            hint = R.string.search_for_users,
             onSearchClicked = {
-                searchAndScroll(
-                    coroutineScope,
-                    listState,
-                    viewModel,
-                    it
-                )
+                searchAndScroll(coroutineScope, listState, viewModel, it)
+            },
+            onTextChange = {
+                searchAndScroll(coroutineScope, listState, viewModel, it)
             }
-        ) {
-            searchAndScroll(
-                coroutineScope,
-                listState,
-                viewModel,
-                it
-            )
-        }
+        )
 
         if (searchResult.itemCount == 0) {
             val emptyTitle = if (uiState.value.query.isNotEmpty())
-                R.string.repo_no_results
-            else R.string.empty_repo_search
+                R.string.users_no_results
+            else R.string.empty_users_search
             EmptyState(emptyTitle)
         } else {
-            RepoSearchResultList(searchResult, listState)
-        }
-    }
-}
-
-@Composable
-private fun RepoSearchResultList(
-    searchResult: LazyPagingItems<GithubRepo>,
-    listState: LazyListState
-) {
-
-    LazyColumn(verticalArrangement = Arrangement.spacedBy(5.dp), state = listState) {
-        items(count = searchResult.itemCount) { index ->
-            if (index == 0) VerticalSpace(height = 14.dp)
-
-            val repoItemData = searchResult[index]?.toRepoItemData()
-            repoItemData?.let { repo ->
-                RepoItem(repoItemData = repo)
+            LazyColumn(verticalArrangement = Arrangement.spacedBy(5.dp), state = listState) {
+                items(count = searchResult.itemCount) { index ->
+                    if (index == 0) VerticalSpace(height = 14.dp)
+                    val userItemData = searchResult[index]?.toUserItemData()
+                    userItemData?.let { user ->
+                        UserItem(userItemData = user) {
+                            onUserClicked(user.id)
+                        }
+                    }
+                }
             }
         }
     }
 }
-
 
 private fun searchAndScroll(
     coroutineScope: CoroutineScope,
     listState: LazyListState,
-    viewModel: SearchRepositoriesViewModel,
+    viewModel: SearchUsersViewModel,
     query: String
 ) {
     coroutineScope.launch {
@@ -111,11 +93,10 @@ private fun searchAndScroll(
     viewModel.onQuery(query)
 }
 
-
 @Preview(showBackground = true)
 @Composable
-fun SearchRepositoriesPreview() {
+fun GreetingPreview() {
     GitemTheme {
-        SearchRepositories()
+        SearchUsers()
     }
 }

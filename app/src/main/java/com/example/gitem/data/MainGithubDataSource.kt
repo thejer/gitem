@@ -3,6 +3,7 @@ package com.example.gitem.data
 import com.example.gitem.data.model.GithubRepo
 import com.example.gitem.data.model.GithubSearchResponse
 import com.example.gitem.data.model.GithubUser
+import com.example.gitem.data.model.GithubUserDetails
 import com.example.gitem.data.remote.ApiService
 import javax.inject.Inject
 
@@ -24,5 +25,13 @@ class MainGithubDataSource @Inject constructor(
     ): GithubSearchResponse<GithubUser> =
         apiService.searchGithubUsers(query, page, itemsPerPage)
 
+    override suspend fun getUserRepos(
+        userId: String,
+        page: Int,
+        itemsPerPage: Int
+    ): List<GithubRepo> =
+        apiService.getGithubUserRepos(userId, page, itemsPerPage)
 
+    override suspend fun getUserDetails(userId: Int): GithubUserDetails =
+        apiService.getGithubUser(userId)
 }

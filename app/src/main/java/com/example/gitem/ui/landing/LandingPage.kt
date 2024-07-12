@@ -31,6 +31,7 @@ import androidx.compose.ui.unit.sp
 import com.example.gitem.R
 import com.example.gitem.ui.theme.GitemTheme
 import com.example.gitem.ui.theme.LightPink
+import com.example.gitem.ui.theme.ManropeFontFamily
 import com.example.gitem.ui.theme.Smudge
 import com.example.gitem.ui.theme.TealGreen
 import com.example.gitem.ui.theme.White
@@ -39,18 +40,22 @@ import com.example.gitem.ui.uiutils.Header
 import com.example.gitem.ui.uiutils.VerticalSpace
 
 @Composable
-fun LandingPage(modifier: Modifier = Modifier) {
-    Column (
+fun LandingPage(
+    modifier: Modifier = Modifier,
+    onUsersClicked: () -> Unit = {},
+    onReposClicked: () -> Unit = {}
+) {
+    Column(
         modifier = modifier
             .fillMaxSize()
             .background(White)
             .padding(start = 20.dp, top = 40.dp, end = 20.dp)
-    ){
+    ) {
         Header(title = stringResource(R.string.home))
 
         VerticalSpace(31.dp)
 
-        Row (
+        Row(
             modifier = Modifier
                 .fillMaxWidth(),
             verticalAlignment = Alignment.Top,
@@ -59,20 +64,14 @@ fun LandingPage(modifier: Modifier = Modifier) {
             LandingCard(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .weight(1f),
-                icon = R.drawable.ic_user_landing,
-                title = stringResource(R.string.users),
-                backgroundColor = TealGreen
-            )
+                    .weight(1f), icon = R.drawable.ic_user_landing, title = stringResource(R.string.users),
+                backgroundColor = TealGreen, onCardClick = onUsersClicked)
 
             LandingCard(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .weight(1f),
-                icon = R.drawable.ic_repo_landing,
-                title = stringResource(R.string.repositories),
-                backgroundColor = LightPink
-            )
+                    .weight(1f), icon = R.drawable.ic_repo_landing, title = stringResource(R.string.repositories),
+                backgroundColor = LightPink, onCardClick = onReposClicked)
         }
     }
 
@@ -125,6 +124,7 @@ private fun LandingCard(
                 text = title,
                 color = Color.Black,
                 fontSize = 16.sp,
+                fontFamily = ManropeFontFamily,
                 fontWeight = FontWeight.Bold
             )
         }

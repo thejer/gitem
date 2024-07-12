@@ -17,6 +17,8 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.LayoutDirection
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
+import com.example.gitem.ui.nav.BottomNavigationBar
+import com.example.gitem.ui.nav.NavigationHost
 import com.example.gitem.ui.theme.GitemTheme
 import com.example.gitem.ui.theme.White
 import dagger.hilt.android.AndroidEntryPoint
@@ -43,7 +45,7 @@ class MainActivity : ComponentActivity() {
             }) { innerPadding ->
             val paddingValues = PaddingValues(
                 start = innerPadding.calculateStartPadding(LayoutDirection.Ltr),
-                end = innerPadding.calculateEndPadding(LayoutDirection.Ltr)
+                end = innerPadding.calculateEndPadding(LayoutDirection.Ltr),
             )
             NavigationHost(
                 modifier = Modifier
