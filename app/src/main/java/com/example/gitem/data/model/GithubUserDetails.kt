@@ -21,7 +21,7 @@ data class GithubUserDetails(
     @field:SerializedName("login")
     val username: String,
     @field:SerializedName("name")
-    val name: String,
+    val name: String?,
     @field:SerializedName("public_repos")
     val publicRepos: Int
 )

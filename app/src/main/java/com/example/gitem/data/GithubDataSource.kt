@@ -13,5 +13,5 @@ interface GithubDataSource {
 
     suspend fun getUserRepos(userId: String, page: Int, itemsPerPage: Int): List<GithubRepo>
 
-    suspend fun getUserDetails(userId: Int): GithubUserDetails
+    suspend fun getUserDetails(userId: Int): Result<GithubUserDetails>
 }

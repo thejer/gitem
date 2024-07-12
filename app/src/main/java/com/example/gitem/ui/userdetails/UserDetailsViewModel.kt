@@ -7,6 +7,7 @@ import androidx.paging.PagingData
 import androidx.paging.cachedIn
 import com.example.gitem.data.model.GithubRepo
 import com.example.gitem.data.repo.GitemRepository
+import com.example.gitem.utils.getExceptionMessage
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -36,20 +37,40 @@ class UserDetailsViewModel @Inject constructor(
     }
 
     private fun getUserDetails(userId: Int) = viewModelScope.launch {
-        repository.getUserDetails(userId)
-            .collectLatest { userDetails ->
+        _uiState.update { state ->
+            state.copy(loadingState = LoadingState.Loading)
+        }
+        repository.getUserDetails(userId).collectLatest { userDetailsResult ->
+            if (userDetailsResult.isSuccess) {
+                val userDetails = userDetailsResult.getOrNull()
+                userDetails?.let {
+                    _uiState.update { state ->
+                        state.copy(
+                            userDetailsData = userDetails.toUserDetailsData(),
+                            loadingState = LoadingState.NotLoading
+                        )
+                    }
+                }
+            } else {
+                val errorMessage = userDetailsResult.exceptionOrNull()?.getExceptionMessage() ?: "Unknown error"
                 _uiState.update { state ->
-                    state.copy(
-                        userDetailsData = userDetails.toUserDetailsData(),
-                    )
+                    state.copy(loadingState = LoadingState.Error(errorMessage))
                 }
             }
+        }
     }
 
-    private fun getUserRepos(userId: Int): Flow<PagingData<GithubRepo>> = repository.getUserReposStream(userId.toString())
+    private fun getUserRepos(userId: Int): Flow<PagingData<GithubRepo>> =
+        repository.getUserReposStream(userId.toString())
 }
-
 
 data class UiState(
     val userDetailsData: UserDetailsData = defaultUserDetails(),
+    val loadingState: LoadingState = LoadingState.NotLoading
 )
+
+sealed class LoadingState {
+    data object Loading : LoadingState()
+    data object NotLoading : LoadingState()
+    data class Error(val message: String) : LoadingState()
+}

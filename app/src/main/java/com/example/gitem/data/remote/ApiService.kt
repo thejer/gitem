@@ -4,6 +4,7 @@ import com.example.gitem.data.model.GithubRepo
 import com.example.gitem.data.model.GithubSearchResponse
 import com.example.gitem.data.model.GithubUser
 import com.example.gitem.data.model.GithubUserDetails
+import retrofit2.Response
 import retrofit2.http.GET
 import retrofit2.http.Path
 import retrofit2.http.Query
@@ -27,7 +28,7 @@ interface ApiService {
     @GET("user/{userId}")
     suspend fun getGithubUser(
         @Path("userId") userId: Int,
-    ): GithubUserDetails
+    ): Response<GithubUserDetails>
 
     @GET("user/{userId}/repos")
     suspend fun getGithubUserRepos(

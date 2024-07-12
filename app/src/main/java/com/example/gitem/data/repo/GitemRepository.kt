@@ -12,9 +12,7 @@ interface GitemRepository {
 
     fun getUserSearchResultStream(query: String): Flow<PagingData<GithubUser>>
 
-    fun getUserDetails(userId: Int): Flow<GithubUserDetails>
+    fun getUserDetails(userId: Int): Flow<Result<GithubUserDetails>>
 
     fun getUserReposStream(userId: String): Flow<PagingData<GithubRepo>>
-
-//    fun getUserDetailsWithRepos(userId: Int): Flow<Pair<GithubUserDetails, List<GithubRepo>>>
 }

@@ -1,5 +1,6 @@
 package com.example.gitem.utils
 
+import android.content.res.Resources
 import okhttp3.Interceptor
 import okhttp3.Response
 import java.io.IOException
@@ -18,3 +19,17 @@ class NetworkExceptionInterceptor : Interceptor {
 }
 
 class NetworkException(s: String, e: IOException) : IOException(s, e)
+
+fun Throwable.getExceptionMessage(): String {
+    return when (this) {
+        is Resources.NotFoundException -> {
+            "Data not found"
+        }
+        is NetworkException -> {
+            "Network error has occurred"
+        }
+        else -> {
+            "An error has occurred"
+        }
+    }
+}

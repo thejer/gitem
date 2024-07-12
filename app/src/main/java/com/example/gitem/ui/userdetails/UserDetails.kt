@@ -20,8 +20,12 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
+import androidx.compose.material3.SnackbarHost
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -38,6 +42,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import androidx.paging.LoadState
 import androidx.paging.compose.LazyPagingItems
 import androidx.paging.compose.collectAsLazyPagingItems
 import coil.compose.AsyncImage
@@ -54,6 +59,7 @@ import com.example.gitem.ui.theme.Midnight_55
 import com.example.gitem.ui.theme.Navy
 import com.example.gitem.ui.theme.White
 import com.example.gitem.ui.uiutils.HorizontalSpace
+import com.example.gitem.ui.uiutils.LoadingIndicator
 import com.example.gitem.ui.uiutils.VerticalSpace
 
 @Composable
@@ -64,6 +70,18 @@ fun UserDetails(
 ) {
     val uiState = viewModel.uiState.collectAsStateWithLifecycle()
     val userRepos = viewModel.pagingDataFlow.collectAsLazyPagingItems()
+
+    val snackBarHostState = remember {
+        SnackbarHostState()
+    }
+
+    uiState.value.loadingState.let { loadingState ->
+        if (loadingState is LoadingState.Error) {
+            LaunchedEffect(key1 = loadingState.message) {
+                snackBarHostState.showSnackbar(loadingState.message)
+            }
+        }
+    }
     Column(
         modifier = modifier
             .fillMaxSize()
@@ -71,6 +89,8 @@ fun UserDetails(
             .padding(vertical = 31.dp, horizontal = 20.dp)
 
     ) {
+        SnackbarHost(hostState = snackBarHostState)
+
         UpButton(onBackPressed)
 
         VerticalSpace(height = 18.dp)
@@ -80,8 +100,8 @@ fun UserDetails(
         MainUserDetails(userDetailsData)
 
         VerticalSpace(height = 20.dp)
-
-        UserDetailsRepos(userDetailsData, userRepos)
+        LoadingIndicator(isLoading = uiState.value.loadingState is LoadingState.Loading)
+        UserDetailsRepos(userDetailsData, userRepos, snackBarHostState)
     }
 }
 
@@ -117,7 +137,11 @@ private fun UpButton(onBackPressed: () -> Unit) {
 }
 
 @Composable
-private fun UserDetailsRepos(userDetailsData: UserDetailsData, repos: LazyPagingItems<GithubRepo>) {
+private fun UserDetailsRepos(
+    userDetailsData: UserDetailsData,
+    repos: LazyPagingItems<GithubRepo>,
+    snackbarHostState: SnackbarHostState
+) {
     Column {
         Row(verticalAlignment = Alignment.CenterVertically) {
 
@@ -144,6 +168,16 @@ private fun UserDetailsRepos(userDetailsData: UserDetailsData, repos: LazyPaging
         }
 
         Column {
+            repos.loadState.let { loadState ->
+                LoadingIndicator(isLoading = loadState.refresh is LoadState.Loading)
+                if (loadState.refresh is LoadState.Error) {
+                    val errorMessage = (loadState.refresh as LoadState.Error).error.message
+                        ?: "Unknown error"
+                    LaunchedEffect(key1 = errorMessage) {
+                        snackbarHostState.showSnackbar(errorMessage)
+                    }
+                }
+            }
             if (repos.itemCount == 0) {
                 EmptyReposState()
             } else {
@@ -249,15 +283,17 @@ private fun MainUserDetails(userDetailsData: UserDetailsData) {
 
             HorizontalSpace(width = 12.dp)
             Column {
-                Text(
-                    text = userDetailsData.name,
-                    style = TextStyle(
-                        fontSize = 16.sp,
-                        fontFamily = ManropeFontFamily,
-                        fontWeight = FontWeight.SemiBold,
-                        color = Black
+                userDetailsData.name?.let {
+                    Text(
+                        text = userDetailsData.name,
+                        style = TextStyle(
+                            fontSize = 16.sp,
+                            fontFamily = ManropeFontFamily,
+                            fontWeight = FontWeight.SemiBold,
+                            color = Black
+                        )
                     )
-                )
+                }
 
                 Text(
                     text = userDetailsData.username,

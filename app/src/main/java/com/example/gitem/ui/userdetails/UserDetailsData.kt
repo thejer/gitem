@@ -11,7 +11,7 @@ data class UserDetailsData(
     val id: Int,
     val location: String?,
     val username: String,
-    val name: String,
+    val name: String?,
     val publicRepos: Int
 )
 
