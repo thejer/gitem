@@ -13,3 +13,9 @@ The app was built using:
 - Gson
 - JUnit and Mockito
 - Paging 3 Lib
+
+
+## Demo Recording
+
+https://github.com/user-attachments/assets/af48fcab-340e-439f-af05-5cf01ff18055
+
