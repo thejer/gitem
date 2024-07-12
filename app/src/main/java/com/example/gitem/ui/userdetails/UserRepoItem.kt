@@ -21,6 +21,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.shadow
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
@@ -44,6 +45,7 @@ import com.example.gitem.ui.theme.Smudge
 import com.example.gitem.ui.theme.White
 import com.example.gitem.ui.uiutils.HorizontalSpace
 import com.example.gitem.ui.uiutils.VerticalSpace
+import com.example.gitem.ui.uiutils.getDateFormat
 
 @Composable
 fun UserRepoItem(repoItemData: RepoItemData) {
@@ -170,7 +172,10 @@ fun UserRepoItem(repoItemData: RepoItemData) {
                 HorizontalSpace(width = 17.dp)
 
                 Text(
-                    text = "Updated 4 days ago",
+                    text = getDateFormat(
+                        context = LocalContext.current,
+                        pastDateString = repoItemData.updatedDate
+                    ),
                     style = TextStyle(
                         fontSize = 10.sp,
                         color = Midnight_55,
